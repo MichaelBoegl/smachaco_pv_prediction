@@ -30,11 +30,11 @@ config = {
 }
 
 model_infos = [
-    ('wr1', 'torch', 'streamlit/models/torch_regression_w1.torch'),
-    ('wr2', 'torch', 'streamlit/models/torch_regression_w2.torch'),
-    ('wr3', 'torch', 'streamlit/models/torch_regression_w3.torch'),
-    ('wr4', 'torch', 'streamlit/models/torch_regression_w4.torch'),
-    ('wr5', 'torch', 'streamlit/models/torch_regression_w5.torch'),
+    ('wr1', 'torch', 'st_pv_prediction/models/torch_regression_w1.torch'),
+    ('wr2', 'torch', 'st_pv_prediction/models/torch_regression_w2.torch'),
+    ('wr3', 'torch', 'st_pv_prediction/models/torch_regression_w3.torch'),
+    ('wr4', 'torch', 'st_pv_prediction/models/torch_regression_w4.torch'),
+    ('wr5', 'torch', 'st_pv_prediction/models/torch_regression_w5.torch'),
 ]
 print("load model...", end="")
 models = load_models(model_infos)
