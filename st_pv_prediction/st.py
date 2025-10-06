@@ -99,26 +99,34 @@ fig.update_layout(
 )
 
 fig.update_xaxes(title_text="Datum und Uhrzeit")
-fig.update_yaxes(title_text="Output [Wh] / Globalstrahlung [W/m^2]", secondary_y=False)
+fig.update_yaxes(title_text="Wechselrichter Output [W] / Globalstrahlung [W/m^2]", secondary_y=False)
 fig.update_yaxes(title_text="Marktpreis [€/kWh]", secondary_y=True)
 st.write(fig)
 
 properties = ['timestamp']
 properties += models.keys()
 
+column_recalculate = [x[0] for x in model_infos]
+
 col1, col2 = st.columns([2, 1])
 with col1:
     st.markdown("# Stundenübersicht")
-    hourly_df = p_df[properties].set_index('timestamp').resample('h').sum().reset_index()
+    hourly_df = p_df.copy()
+    for c in column_recalculate:
+        hourly_df[c] = hourly_df[c]*15/60    
+    hourly_df = hourly_df[properties].set_index('timestamp').resample('h').sum().reset_index()
     hourly_df = hourly_df.rename(columns={'cglo': 'Globalstrahlung', 'timestamp': 'Zeitpunkt'})
-    fig = px.bar(data_frame=hourly_df, x='Zeitpunkt', y=[x for x in models.keys()])
+    fig = px.bar(data_frame=hourly_df, x='Zeitpunkt', y=[x for x in models.keys()], labels={'value': 'Energie [Wh]', 'variable': 'Wechselrichter'})
     st.write(fig)
 
 with col2:
     st.markdown('# Tagesübersicht')
-    daily_df = p_df[properties].set_index('timestamp').resample('D').sum().reset_index()
+    daily_df = p_df.copy()
+    for c in column_recalculate:
+        daily_df[c] = daily_df[c]*15/60
+    daily_df = daily_df[properties].set_index('timestamp').resample('D').sum().reset_index()
     daily_df = daily_df.rename(columns={'cglo': 'Globalstrahlung', 'timestamp': 'Zeitpunkt'})
-    fig = px.bar(data_frame=daily_df, x='Zeitpunkt', y=[x for x in models.keys()])
+    fig = px.bar(data_frame=daily_df, x='Zeitpunkt', y=[x for x in models.keys()], labels={'value': 'Energie [Wh]', 'variable': 'Wechselrichter'})
     st.write(fig)
 
 properties = ['timestamp', 'cglo']
