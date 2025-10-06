@@ -49,7 +49,6 @@ def get_cglo_prediction(config, dt_start, dt_end):
     cglo_df = pd.DataFrame({'timestamp': timestamps, 'cglo': cglo})
     cglo_df['timestamp'] = pd.to_datetime(cglo_df['timestamp'], utc=True)
     cglo_df['cglo'] = cglo_df['cglo'].diff(1)/3600
-    #cglo_df['cglo'].loc[cglo_df['cglo']<0] = 0.0
     cglo_df.loc[cglo_df['cglo']<0, "cglo"] = 0.0
     cglo_df = cglo_df.iloc[1:]
 
